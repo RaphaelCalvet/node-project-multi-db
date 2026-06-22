@@ -1,0 +1,9 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="16" fill="#0a0a0a"/>
+  <!-- Eixo vertical (esmeralda) -->
+  <rect x="30" y="14" width="4" height="36" rx="2" fill="#10b981"/>
+  <!-- Três camadas de dados, do claro ao escuro -->
+  <ellipse cx="32" cy="20" rx="13" ry="5" fill="#ffffff"/>
+  <ellipse cx="32" cy="32" rx="13" ry="5" fill="#a1a1aa"/>
+  <ellipse cx="32" cy="44" rx="13" ry="5" fill="#52525b"/>
+</svg>

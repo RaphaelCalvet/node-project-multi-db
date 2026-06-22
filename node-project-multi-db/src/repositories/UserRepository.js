@@ -6,11 +6,16 @@ export class UserRepository {
   }
 
   async findAll() {
-      return await User.find();
+      return await User.find().sort({ createdAt: -1 });
   }
 
   async findById(id) {
       return await User.findById(id);
+  }
+
+  // Usado na autenticação: retorna o documento "cru", incluindo a senha.
+  async findByEmailWithPassword(email) {
+      return await User.findOne({ email }).select('+password');
   }
 
   async update(id, data) {

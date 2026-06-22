@@ -1,17 +1,26 @@
 version: '3.8'
 
 services:
+  # ===== Backend (Express) =====
   app:
     build: .
     ports:
       - "3000:3000"
     environment:
+      - PORT=3000
       - MYSQL_HOST=mysql_db
       - MONGO_URI=mongodb://mongo_db:27017/empresa
+      - JWT_SECRET=${JWT_SECRET:-changeme-secret-dev}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-8h}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@example.com}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
     depends_on:
-      - mysql_db
-      - mongo_db
+      mysql_db:
+        condition: service_healthy
+      mongo_db:
+        condition: service_started
 
+  # ===== MySQL (produtos) =====
   mysql_db:
     image: mysql:8.0
     restart: always
@@ -20,9 +29,23 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
+  # ===== MongoDB (usuários) =====
   mongo_db:
     image: mongo:latest
     restart: always
     ports:
       - "27017:27017"
+
+  # ===== Frontend (React + nginx) =====
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
